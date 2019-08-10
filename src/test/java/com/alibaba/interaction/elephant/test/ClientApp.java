@@ -2,6 +2,7 @@ package com.alibaba.interaction.elephant.test;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.interaction.elephant.rpc.client.ElephantClient;
+import com.alibaba.interaction.elephant.rpc.consumer.ConsumerFactory;
 import com.alibaba.interaction.elephant.rpc.meta.ParamMeta;
 import com.alibaba.interaction.elephant.rpc.meta.RpcRequestMeta;
 import com.alibaba.interaction.elephant.test.provider.HelloWorldService;
@@ -106,6 +107,27 @@ public class ClientApp {
 
         log.info("rpc data :{} ", object);
         countDownLatch.await();
+    }
+
+
+    @Test
+    public void consumerTest() throws InterruptedException {
+
+
+        HelloWorldService consumer = ConsumerFactory.createConsumer(HelloWorldService.class, "1.0.0.daily", elephantClient);
+
+
+        User user = new User();
+        user.setName("ljinshuan-didi");
+        user.setAge(10000L);
+
+        User user1 = consumer.sayHello("ljinshuan", user);
+
+
+        log.info("invoke result {}", user1);
+
+        countDownLatch.await();
+
     }
 
 }

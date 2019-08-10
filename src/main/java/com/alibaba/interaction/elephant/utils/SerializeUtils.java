@@ -1,6 +1,7 @@
 package com.alibaba.interaction.elephant.utils;
 
 import com.alibaba.fastjson.JSON;
+import org.apache.commons.lang3.StringUtils;
 
 public class SerializeUtils {
 
@@ -16,6 +17,9 @@ public class SerializeUtils {
             return null;
         }
 
+        if (StringUtils.equalsIgnoreCase(typeName, "java.lang.Void")) {
+            return null;
+        }
 
         switch (typeName) {
 
