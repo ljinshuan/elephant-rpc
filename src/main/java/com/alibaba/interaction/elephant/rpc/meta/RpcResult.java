@@ -11,4 +11,7 @@ public class RpcResult implements Serializable {
 
 
     private Object data;
+
+
+    private Throwable exception;
 }

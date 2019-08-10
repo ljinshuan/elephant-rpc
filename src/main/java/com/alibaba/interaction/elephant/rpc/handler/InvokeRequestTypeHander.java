@@ -10,6 +10,8 @@ import com.alibaba.interaction.elephant.rpc.provider.ServiceProvider;
 import com.alibaba.interaction.elephant.utils.ThreadUtils;
 import lombok.extern.slf4j.Slf4j;
 
+import java.lang.ref.Reference;
+
 
 /**
  * 方法调用处理器
@@ -27,16 +29,22 @@ public class InvokeRequestTypeHander implements RequestTypeHandler {
 
         ThreadUtils.runAsyncNoWait(() -> {
 
-            Object invoke = ServiceProvider.invoke(rpcContext, serviceRequestMeta);
-
             EleResponse response = new EleResponse();
             response.setSessionId(serviceRequestMeta.getSessionId());
             response.setRequestId(serviceRequestMeta.getRequestId());
             RpcResult rpcResult = new RpcResult();
-            rpcResult.setData(invoke);
-            response.setRpcResult(rpcResult);
 
+            try {
+                Object invoke = ServiceProvider.invoke(rpcContext, serviceRequestMeta);
+
+                response.setRpcResult(rpcResult);
+                rpcResult.setData(invoke);
+            } catch (Throwable t) {
+                rpcResult.setException(t);
+            }
             responseFuture.set(response);
+
+
             return responseFuture;
         });
 

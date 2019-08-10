@@ -56,8 +56,8 @@ public class RpcRequestMeta implements Serializable {
 
 
     /**
-     * 参数
+     *
      */
-    private List<Object> args;
+    private List<ParamMeta> paramMetas;
 
 }
